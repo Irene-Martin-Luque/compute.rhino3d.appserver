@@ -156,8 +156,8 @@ function commonSolve (req, res, next){
       }
 
     }).then( (result) => {
-      // Note: IIS does not send these headers which was causing an issue with the appserver response
-      /*const timeComputeServerCallComplete = performance.now()
+      /*
+      const timeComputeServerCallComplete = performance.now()
 
       let computeTimings = computeServerTiming.get('server-timing')
       let sum = 0
