@@ -1,0 +1,42 @@
+CYBER-NEIGHBOURHOOD CONFIGURATOR by Irene Martín Luque
+MaCAD at IaaC
+
+Pluggins: DeCodingSpaces
+
+The proposed configurator would aim to provide users with the possibility of generaing their own neighbourhood.
+
+The following are the customizable parametres that would be provided:
+
+  a. A total of six reference points that would allow the user to stablish the city's perimetre (gumball)
+  b. A total of six reference points that would allow the user to draw the square's perimetre (gumball)
+  c. The minimum lenght of the streets (slider)
+  d. The maximum lenght of the streets (slider)
+  e. The minimum distance between the streets (slider)
+  f. Streets's width (slider)
+  g. Plot's with (slider)
+  h. Buildings' tipology (Checkbox/Slider)
+      h.1 Residential
+      h.2 Shops
+      h.3 Cultural
+  
+  Project's workflow:
+  
+  1. 2D Grasshopper Definition
+      1.1 Perimetre
+      1.2 Streets and plots
+      1.3 Buildings (to be modelled in Rhino)
+  2. 3D Grasshopper Definition
+      2.1 Smoothen the perimetre
+      2.2 Terrain extrusion
+      2.3 Streets offset
+      2.4 Plots offset
+  3. Detailed Buildings (at the central point of the plots)
+  4. Customize java (plain background?)
+  5. Customize httml (sliders on the left)
+      Provide the user with the possibility of naming his/her city
+  
+  Questions:
+      1. Is it possible to create a checkbox? 
+      2. Is it the best way to add buildings?
+      3. Could I provide the option of taking a screenshot to create a 'postcard'?
+      4. AM I BEING TO AMBICIOUS?
