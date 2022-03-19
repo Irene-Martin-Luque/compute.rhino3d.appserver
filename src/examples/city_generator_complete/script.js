@@ -53,36 +53,38 @@ rhino3dm().then(async m => {
 function rndPts() {
   // generate random points
 
-  const cntPts = 12;
-  const bndX = 12;
-  
+  const cntPts = 12
+  const bndX = 4
+  const bndY = 4
 
   for (let i = 0; i < cntPts; i++) {
-    const x = Math.random() *  bndX;
-    const y = Math.random() *  bndX;
-    const z = Math.random() *  bndX;
+    const x = Math.random() * (bndX - -bndX) + -bndX
+    const y = Math.random() * (bndY - -bndY) + -bndY
+    const z = 0
 
-    const pt = '{"X":' + x + ',"Y":' + y + ',"Z":' + z + "}";
+    const pt = "{\"X\":" + x + ",\"Y\":" + y + ",\"Z\":" + z + "}"
 
-    console.log(`x ${x} y ${y} z ${z}`);
+    console.log( `x ${x} y ${y}` )
 
-    points.push(pt);
+    points.push(pt)
 
     //viz in three
-    const icoGeo = new THREE.IcosahedronGeometry(0.1);
-    const icoMat = new THREE.MeshNormalMaterial();
-    const ico = new THREE.Mesh(icoGeo, icoMat);
-    ico.name = "ico";
-    ico.position.set(x, y, z);
-    scene.add(ico);
-
-    let tcontrols = new TransformControls(camera, renderer.domElement);
-    tcontrols.enabled = true;
-    tcontrols.attach(ico);
-    //tcontrols.showZ = false;
-    tcontrols.addEventListener("dragging-changed", onChange);
-    scene.add(tcontrols);
+    const icoGeo = new THREE.IcosahedronGeometry(5)
+    const icoMat = new THREE.MeshNormalMaterial()
+    const ico = new THREE.Mesh( icoGeo, icoMat )
+    ico.name = 'ico'
+    ico.position.set( x, y, z)
+    scene.add( ico )
+    
+    let tcontrols = new TransformControls( camera, renderer.domElement )
+    tcontrols.enabled = true
+    tcontrols.attach( ico )
+    tcontrols.showZ = false
+    tcontrols.addEventListener( 'dragging-changed', onChange )
+    scene.add(tcontrols)
+    
   }
+
 }
 
 let dragging = false;
