@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png"> -->
+        <title>City Generator</title>
+        <style>
+            body {
+                margin: 0;
+                font-family: monospace;
+                text-align: left;
+                background-color: #f3f3f3
+            }
+
+            header{
+                font-size: 28px;
+                text-align: left;
+                padding: 10px;
+                padding-right: 0;
+                width: 100%;
+                display: inline-block;
+                font-weight: bold;
+                color: white;
+                text-decoration: none;
+                font-style: monocorde;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                background-color: #3d3d3d;
+                letter-spacing: 2px;
+                border-radius: 0px;
+            }
+
+            h3{
+                font-size: 20px;
+                text-align: left;
+                padding: 10px;
+                padding-right: 0;
+                width: 100%;
+                display: inline-block;
+                font-weight: bold;
+                color: #3d3d3d;
+                text-decoration: none;
+                font-style: none;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                background-color: rgba(255, 255, 255, 0.048);
+                letter-spacing: 0.2px;
+                border-radius: 0px;
+            }
+
+                      canvas { width: 100%; height: 100%; }
+            input[type=range] { width: 100%; }
+            #container { position: relative; }
+            #container canvas, #overlay { position: absolute; }
+            #overlay { z-index: 1; width: 20%; }
+            #overlay div { padding: 5px; }
+           
+
+            #sidebar {  
+                z-index: 1; 
+                width: 350px;
+                background-color: white;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                float: left;
+                position: absolute;
+                } 
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            .slider{
+                -webkit-appearance: none;
+                width: 12px;
+                height: 8px;
+                border-radius: 5px;
+                border-color: rgb(255, 255, 255);
+                background-color: #3d3d3d;
+            }
+
+            .slider::-webkit-slider-thumb{
+                -webkit-appearance: none;
+                width: 16px;
+                height: 16px;
+                border-radius: 12px;
+                background-color: #3d3d3d;
+                cursor: pointer;
+            }
+
+            .sliderLabel{
+                font-size: 15px;
+                text-align: left;
+                padding: 10px;
+                padding-right: 0;
+                width: 100%;
+                display: inline-block;
+                font-weight: bold;
+                color: #3d3d3d;
+                text-decoration: none;
+                font-style: normal;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                background-color: rgba(255, 255, 255, 0.048);
+                letter-spacing: 0.2px;
+                border-radius: 0px;
+            }
+
+            #loader {
+                border: 5px solid #f3f3f3; /* Light grey */
+                border-top: 5px solid #3d3d3d; /* Grey */
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                animation: spin 1s linear infinite;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                z-index: 2;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .button {
+            border-radius: 30px;
+            background-color: #3d3d3d;
+            border: none;
+            color: #ffffff;
+            text-align: center;
+            font-size: 12PX;
+            font-weight: bold;
+            padding: 15px;
+            width: 150px;
+            transition: all 0.5s;
+            cursor: pointer;
+            margin: 5px;
+            }
+
+            .button span {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: 0.5s;
+            }
+
+            .button span:after {
+            content: '\00bb';
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+            }
+
+            .button:hover span {
+            padding-right: 25px;
+            }
+
+            .button:hover span:after {
+            opacity: 1;
+            right: 0;
+            }   
+            
+        
+            
+
+        </style>
+    </head>
+    <body>
+    </div>
+    <header>City Generator</header>
+    </div>
+        <div id="loader"></div> 
+        <div id="container">
+            <div id="overlay">
+                <div>
+                  <h3>Move the sliders to start</h3></div>
+              <div id="info">
+
+                <div>
+                  <label for="streets1">Minimum Street Lenght</label>
+                  <input type="range" id="streets1" min="10" max="1000" value="189" step="1">
+                </div>
+                <div>
+                  <label for="streets2">Maximum Street Lenght</label>
+                  <input type="range" id="streets2" min="10" max="1000" value="584" step="1">
+                </div>
+                <div>
+                  <label for="distance">Maximum Distance Between Streets</label>
+                  <input type="range" id="distance" min="10" max="100" value="45" step="1">
+                </div>
+                <div>
+                  <label for="width">Street Width</label>
+                  <input type="range" id="width" min="1" max="10" value="7.34" step="1">
+                </div>
+                <div>
+                  <label for="plots">Plot Size</label>
+                  <input type="range" id="plots" min="1" max="100" value="73" step="1">
+                </div>
+                <div>
+                  <label for="buildings1">Building Size - Minimum Value</label>
+                  <input type="range" id="buildings1" min="1" max="10" value="1.5" step="1">
+                </div>
+                <div>
+                  <label for="buildings2">Building Size - Maximum Value</label>
+                  <input type="range" id="buildings2" min="1" max="10" value="9" step="1">
+                </div>
+                <div>
+                  <label for="terrain">Terrain Depthness</label>
+                  <input type="range" id="terrain" min="100" max="1000" value="384" step="1">
+                </div>
+                        
+              <button class="button" id="downloadButton"><span>Download Drawing</span></button>
+         </div>
+ </div>
+
+    
+</div>
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
