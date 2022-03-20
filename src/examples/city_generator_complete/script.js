@@ -9,7 +9,7 @@ import rhino3dm from 'https://cdn.jsdelivr.net/npm/rhino3dm@0.15.0-beta/rhino3dm
 const loader = new Rhino3dmLoader()
 loader.setLibraryPath( 'https://cdn.jsdelivr.net/npm/rhino3dm@0.15.0-beta/' )
 
-const definition = 'city_generator_complete.gh'
+const definition = 'city_generator_sliders2.gh'
 
 // setup input change events
 const streets1_slider = document.getElementById( 'streets1' )
@@ -37,6 +37,7 @@ const terrain_slider = document.getElementById( 'terrain' )
 terrain_slider.addEventListener( 'mouseup', onSliderChange, false )
 terrain_slider.addEventListener( 'touchend', onSliderChange, false )
 
+
 let points = []
 
 let rhino, doc
@@ -51,16 +52,27 @@ rhino3dm().then(async m => {
 })
 
 function rndPts() {
-  // generate random points
-
-  const cntPts = 12
-  const bndX = 4
-  const bndY = 4
+  // generate Inital points
+  const startPts = [
+    { x: 93, y: 790, z: 0 },
+    { x: 560, y: 725, z: 0 },
+    { x: 750, y: 340, z: 0 },
+    { x: 460, y: 1, z: 0 },
+    { x: 6, y: 48, z: 0 },
+    { x: 1, y: 460, z: 0 },
+    { x: 185, y: 530, z: 0 },
+    { x: 245, y: 544, z: 0 },
+    { x: 360, y: 470, z: 0 },
+    { x: 375, y: 345, z: 0 },
+    { x: 260, y: 315, z: 0 },
+    { x: 144, y: 430, z: 0 },
+]
+const cntPts = startPts.length
 
   for (let i = 0; i < cntPts; i++) {
-    const x = Math.random() * (bndX - -bndX) + -bndX
-    const y = Math.random() * (bndY - -bndY) + -bndY
-    const z = 0
+    const x = startPts[i].x
+    const y = startPts[i].y
+    const z = startPts[i].z
 
     const pt = "{\"X\":" + x + ",\"Y\":" + y + ",\"Z\":" + z + "}"
 
@@ -69,7 +81,7 @@ function rndPts() {
     points.push(pt)
 
     //viz in three
-    const icoGeo = new THREE.IcosahedronGeometry(5)
+    const icoGeo = new THREE.IcosahedronGeometry(25)
     const icoMat = new THREE.MeshNormalMaterial()
     const ico = new THREE.Mesh( icoGeo, icoMat )
     ico.name = 'ico'
@@ -87,41 +99,34 @@ function rndPts() {
 
 }
 
-let dragging = false;
+let dragging = false
 function onChange() {
-  dragging = !dragging;
-  if (!dragging) {
+  dragging = ! dragging
+  if ( !dragging ) {
     // update points position
-    points = [];
-    scene.traverse((child) => {
-      if (child.name === "ico") {
-        const pt =
-          '{"X":' +
-          child.position.x +
-          ',"Y":' +
-          child.position.y +
-          ',"Z":' +
-          child.position.z +
-          "}";
-        points.push(pt);
-        console.log(pt);
+    points = []
+    scene.traverse(child => {
+      if ( child.name === 'ico' ) {
+        const pt = "{\"X\":" + child.position.x + ",\"Y\":" + child.position.y + ",\"Z\":" + child.position.z + "}"
+        points.push( pt )
+        console.log(pt)
       }
-    }, false);
+    }, false)
 
-    compute();
+    compute()
 
-    controls.enabled = true;
-    return;
-  }
-
-  controls.enabled = false;
+    controls.enabled = true
+    return 
 }
 
+  controls.enabled = false
+
+}
 
 /**
  * Call appserver
  */
- async function compute () {
+async function compute () {
 
   showSpinner(true)
 
@@ -218,14 +223,14 @@ function onChange() {
 
       ///////////////////////////////////////////////////////////////////////
       
-      // color crvs
+      // color mesh
       object.traverse(child => {
         if (child.isLine) {
           if (child.userData.attributes.geometry.userStringCount > 0) {
             //console.log(child.userData.attributes.geometry.userStrings[0][1])
             const col = child.userData.attributes.geometry.userStrings[0][1]
             const threeColor = new THREE.Color( "rgb(" + col + ")")
-            const mat = new THREE.LineBasicMaterial({color:threeColor})
+            const mat = new THREE.MeshBasicMaterial({color:threeColor})
             child.material = mat
           }
         }
