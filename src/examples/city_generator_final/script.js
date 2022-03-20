@@ -1,3 +1,7 @@
+//Script by MaCAD's Digital Tool for Data-Cloud Management Faculty
+//David Andrés León and Hesham Sawqy
+//Updates by Irene Martín Lque
+
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.126.0/build/three.module.js'
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.126.0/examples/jsm/controls/OrbitControls.js'
 import { Rhino3dmLoader } from 'https://cdn.jsdelivr.net/npm/three@0.126.0/examples/jsm/loaders/3DMLoader.js'
@@ -331,56 +335,90 @@ function showSpinner(enable) {
 
 // BOILERPLATE //
 
-var scene, camera, renderer, controls
+var scene, camera, renderer, controls;
 
-function init () {
+function init() {
   // Rhino models are z-up, so set this as the default
-  THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 );
+  THREE.Object3D.DefaultUp = new THREE.Vector3(0, 0, 1);
 
-  scene = new THREE.Scene()
-  scene.background = new THREE.Color(196,196,196)
-  camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 1, 1000 )
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(1, 1, 1);
+  camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    1,
+    10000
+  );
+  camera.position.x = 1000;
+  camera.position.y = 1000;
+  camera.position.z = 1000;
 
-  renderer = new THREE.WebGLRenderer({antialias: true})
-  renderer.setPixelRatio( window.devicePixelRatio )
-  renderer.setSize( window.innerWidth, window.innerHeight )
-  document.body.appendChild(renderer.domElement)
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-  controls = new OrbitControls( camera, renderer.domElement  )
+  controls = new OrbitControls(camera, renderer.domElement);
 
-  camera.position.z = 50
+  window.addEventListener("resize", onWindowResize, false);
 
-  window.addEventListener( 'resize', onWindowResize, false )
-
-  animate()
+  animate();
 }
 
 var animate = function () {
-  requestAnimationFrame( animate )
-  controls.update()
-  renderer.render( scene, camera )
-}
-  
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+};
+
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight
-  camera.updateProjectionMatrix()
-  renderer.setSize( window.innerWidth, window.innerHeight )
-  animate()
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  animate();
 }
 
-function replaceCurrentMesh (threeMesh) {
-  if (_threeMesh) {
-    scene.remove(_threeMesh)
-    _threeMesh.geometry.dispose()
+//Download button
+function download (){
+  let buffer = doc.toByteArray()
+  let blob = new Blob([ buffer ], { type: "application/octect-stream" })
+  let link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.download = 'Lewis_Final_Iteration 4.3dm'
+  link.click()
   }
-  _threeMesh = threeMesh
-  scene.add(_threeMesh)
+
+/**
+ * Helper function that behaves like rhino's "zoom to selection", but for three.js!
+ */
+function zoomCameraToSelection( camera, controls, selection, fitOffset = 1.2 ) {
+  
+  const box = new THREE.Box3();
+  
+  for( const object of selection ) {
+    if (object.isLight) continue
+    box.expandByObject( object );
+  }
+  
+  const size = box.getSize( new THREE.Vector3() );
+  const center = box.getCenter( new THREE.Vector3() );
+  
+  const maxSize = Math.max( size.x, size.y, size.z );
+  const fitHeightDistance = maxSize / ( 2 * Math.atan( Math.PI * camera.fov / 360 ) );
+  const fitWidthDistance = fitHeightDistance / camera.aspect;
+  const distance = fitOffset * Math.max( fitHeightDistance, fitWidthDistance );
+  
+  const direction = controls.target.clone()
+    .sub( camera.position )
+    .normalize()
+    .multiplyScalar( distance );
+  controls.maxDistance = distance * 10;
+  controls.target.copy( center );
+  
+  camera.near = distance / 100;
+  camera.far = distance * 100;
+  camera.updateProjectionMatrix();
+  camera.position.copy( controls.target ).sub(direction);
+  
+  controls.update();
+  
 }
-
-function meshToThreejs (mesh, material) {
-  let loader = new THREE.BufferGeometryLoader()
-  var geometry = loader.parse(mesh.toThreejsJSON())
-  return new THREE.Mesh(geometry, material)
-}
-
-
