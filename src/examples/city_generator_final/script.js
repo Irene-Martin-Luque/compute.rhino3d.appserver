@@ -118,7 +118,7 @@ function rndPts() {
       let tcontrols = new TransformControls(camera, renderer.domElement);
       tcontrols.enabled = true;
       tcontrols.attach(ico);
-      //tcontrols.showZ = false;
+      tcontrols.showZ = false;
       tcontrols.addEventListener("dragging-changed", onChange);
       scene.add(tcontrols);
 
@@ -262,15 +262,12 @@ function collectResults(responseJson) {
   // load rhino doc into three.js scene
   const buffer = new Uint8Array(doc.toByteArray()).buffer;
   loader.parse(buffer, function (object) {
-    // clear objects from scene\
-    scene.traverse((child) => {
-      if (
-        child.userData.hasOwnProperty("objectType") &&
-        child.userData.objectType === "File3dm"
-      ) {
-        scene.remove(child);
+    // clear objects from scene
+    scene.traverse(child => {
+      if ( child.userData.hasOwnProperty( 'objectType' ) && child.userData.objectType === 'File3dm') {
+        scene.remove( child )
       }
-    });
+    })
 
     ///////////////////////////////////////////////////////////////////////
 
@@ -281,14 +278,12 @@ function collectResults(responseJson) {
           //console.log(child.userData.attributes.geometry.userStrings[0][1])
           const col = child.userData.attributes.geometry.userStrings[0][1];
           const threeColor = new THREE.Color("rgb(" + col + ")");
-          const mat = new THREE.MeshBasicMaterial({ color: threeColor });
+          const mat = new THREE.MeshPhysicalMaterial({ color: threeColor });
           child.material = mat;
         }
       }
-    });
+    })
    
-  
-
     ///////////////////////////////////////////////////////////////////////
     // add object graph from rhino model to three.js scene
     scene.add(object);
@@ -296,7 +291,7 @@ function collectResults(responseJson) {
     // hide spinner and enable download button
     showSpinner(false);
     //downloadButton.disabled = false
-  });
+  })
 }
 
 /**
@@ -359,8 +354,9 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   controls = new OrbitControls(camera, renderer.domElement);
-
-  window.addEventListener("resize", onWindowResize, false);
+  
+  // handle changes in the window size
+  window.addEventListener( 'resize', onWindowResize, false )
 
   animate();
 }
@@ -422,3 +418,4 @@ function zoomCameraToSelection( camera, controls, selection, fitOffset = 1.2 ) {
   controls.update();
   
 }
+
