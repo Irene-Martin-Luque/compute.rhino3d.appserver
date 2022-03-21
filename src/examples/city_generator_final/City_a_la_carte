@@ -1,0 +1,47 @@
+The following is a project that has been created as part of the MaCAD Programme at IaaC
+
+////////////////////////////////////////////////////////////////////
+
+Name of the Project: City à la Carte
+Programme: Master in Advance Computation for Architecture and Design
+Faculty: 
+  David Andrés León
+  Hesham Shawqy
+Script owners:
+  David Andrés León
+  Hesham Shawqy
+Project Author: Irene Martín Luque
+
+
+The proposed configurator aims to provide users with the possibility of generaing their own city.
+
+The following are the customizable parametres that would be provided:
+
+  a. A total of six reference points that would allow the user to stablish the city's perimetre (gumball)
+  b. A total of six reference points that would allow the user to draw the square's perimetre (gumball)
+  c. The minimum lenght of the streets (slider)
+  d. The maximum lenght of the streets (slider)
+  e. The minimum distance between the streets (slider)
+  f. Streets's width (slider)
+  g. Plot's with (slider)
+  h. Buildings' tipology
+      h.1 Residential
+      h.2 Shops
+      h.3 Cultural
+      
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  Project's workflow:
+  
+  Plogins: DeCoding Spaces
+
+  1. 2D Grasshopper Definition
+      1.1 Perimetre
+      1.2 Streets and plots
+      1.3 Buildings (modeled in Rhino)
+  2. 3D Grasshopper Definition
+      2.1 Smoothen the perimetre
+      2.2 Terrain extrusion
+      2.3 Streets offset
+      2.4 Plots offset
+  3. Detailed Buildings (at the central point of the plots)
