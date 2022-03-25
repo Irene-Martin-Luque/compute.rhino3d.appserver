@@ -356,7 +356,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
 
   // add a directional light
-  const directionalLight = new THREE.DirectionalLight( 0xffffff )
+  const directionalLight = new THREE.DirectionalLight( 0xd3d3d3 )
   directionalLight.intensity = 1
   scene.add( directionalLight )
   const ambientLight = new THREE.AmbientLight()
